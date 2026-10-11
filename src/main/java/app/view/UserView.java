@@ -42,6 +42,14 @@ public class UserView {
 
     public void selectById(int id) {
 
+        User user = userService.selectById(id);
+
+        if (user == null) {
+            System.out.println("No existe un usuario con el id " + id);
+            return;
+        }
+
+        printUser(user);
     }
 
 
@@ -54,13 +62,50 @@ public class UserView {
 
     public void update() {
 
+        int id = DataTypeValidator.validateInt("Ingrese el id del usuario a actualizar: ");
+
+        if (userService.selectById(id) == null) {
+            System.out.println("No existe un usuario con el id " + id);
+            return;
+        }
+
+        String name = DataTypeValidator.validateString("Ingrese el nuevo nombre del usuario: ");
+        String lastName = DataTypeValidator.validateString("Ingrese el nuevo apellido del usuario: ");
+        String email = DataTypeValidator.validateString("Ingrese el nuevo correo del usuario: ");
+        String phone = DataTypeValidator.validateString("Ingrese el nuevo telefono del usuario: ");
+        String password = DataTypeValidator.validateString("Ingrese la nueva contraseña del usuario: ");
+        System.out.println("Ingrese el nuevo estado del usuario: ");
+        String state = SetUserState.getUserState();
+        String city = DataTypeValidator.validateString("Ingrese la nueva ciudad del usuario: ");
+        System.out.println("Ingrese las nuevas preferencias del usuario: ");
+        String preferences = setUserPreferences();
+
+        User updated = userService.update(id, name, lastName, email, phone, password, state, city, preferences);
+
+        if (updated != null) {
+            System.out.println("Usuario actualizado correctamente:");
+            printUser(updated);
+        } else {
+            System.out.println("No se pudo actualizar el usuario");
+        }
+    }
+
+    public void deleteUser(int id) {
+
+        if (userService.deleteUser(id)) {
+            System.out.println("Usuario con id " + id + " eliminado correctamente");
+        } else {
+            System.out.println("No existe un usuario con el id " + id);
+        }
+    }
+
+    public void countUsers() {
+
+        System.out.println("Total de usuarios registrados: " + userService.countUsers());
     }
 
 
     // métodos Helper
-
-
-
 
     public String setUserPreferences(){
 
@@ -84,6 +129,17 @@ public class UserView {
 
         }
         return preferences;
+    }
+
+    private void printUser(User user) {
+
+        System.out.println("Id: " + user.getId());
+        System.out.println("Nombre: " + user.getName() + " " + user.getLastName());
+        System.out.println("Correo: " + user.getEmail());
+        System.out.println("Telefono: " + user.getPhone());
+        System.out.println("Estado: " + user.isState());
+        System.out.println("Ciudad: " + user.getCity());
+        System.out.println("Preferencias: " + user.getPreferences());
     }
 
 

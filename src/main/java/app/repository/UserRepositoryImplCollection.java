@@ -31,6 +31,12 @@ public class UserRepositoryImplCollection implements UserRepository {
 
     @Override
     public User selectById(int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+
         return null;
     }
 
@@ -49,11 +55,30 @@ public class UserRepositoryImplCollection implements UserRepository {
 
     @Override
     public User updateUser(User user) {
+
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(user.getId())) {
+                users.set(i, user);
+                return user;
+            }
+        }
+
         return null;
     }
 
     @Override
-    public void deleteById(int id) {
+    public boolean deleteById(int id) {
+        User user = selectById(id);
 
+        if (user == null) {
+            return false;
+        }
+
+        return users.remove(user);
+    }
+
+    @Override
+    public int countUsers() {
+        return users.size();
     }
 }

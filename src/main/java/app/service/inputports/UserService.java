@@ -6,15 +6,10 @@ import java.util.List;
 
 public interface UserService {
 
-
     public User create(Integer id, String name, String lastName, String email, String phone, String password, String state, String city, String preferences);
-    public void selectById(int id);
+    public User selectById(int id);          // antes void
     public List<User> selectUsers();
-    public void update();
-    public void deleteUser(int id);
-
-
-
-
-
+    public User update(Integer id, String name, String lastName, String email, String phone, String password, String state, String city, String preferences);  // antes update() void sin parámetros
+    public boolean deleteUser(int id);       // antes void
+    public int countUsers();                 // NUEVO
 }
